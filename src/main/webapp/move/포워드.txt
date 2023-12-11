@@ -1,0 +1,46 @@
+페이지 이동
+
+a.jsp -> b.jsp
+
+1)response.sendRedirect("./b.jsp") - 페이지가 존재하지 않으면 404발동
+:주소창이 변한다 - isRedirect:boolean
+: 기존에 요청은 끊어지고 새로운{request, response다름} 요청이 일어난다
+응답객체가 제공하는 메소드이다
+:파라미터는 String타입이다. - 컴파일을 하는 언어이다. - 배포 - 빌드 - Maven, Gradle(Spring)
+<->자바스크립트 컴파일이 없다 - 런타임에 결정된다. - 번들러 통해서 배포 버전을 생성함
+
+2)RequestDispatcher view = req.getRequestDispatcher("./b.jsp");
+view.forward(req,res);//url은 바뀌지 않는데 그런데 화면은 바뀐다
+:언제사용하지? - select 일때
+url매핑 - 약속 - 표준이다 - 예측 - 안전하다
+1. exact
+2./basic/*
+3*.do - 내가 관여할께
+4. default -> / -> context directory
+POJO - 전처리 부가 필요하다
+전처리를 하기 위해서는 나를 통하도록 한다
+뒤에 확장자이름에 .gd가 있으면 내가 가로챈다
+@WebServlet("/auth/login.do")
+주소는 /auth/login.do{서블릿} -> index.jsp(출력)이었다
+
+요청이 바뀌었다
+제어권(책임-관심사)이 서블릿에서 index.jsp로 넘어갔다
+
+
+3) refresh - 새로고침 - F5 - 동기화(브라우저와 Tomcat처리된 결과 반영(맞춘다))
+새로운 요청이 발동한다
+주소창이 안바뀐다
+세션이나 쿠키값을 들고 온다??? - 상태값 -강조
+
+
+4) location.href ="./index.jsp";
+location.href="/auth/login.do";
+
+
+http - 비상태 프로토콜 -stateless - 상태가 유지되지 않는다
+왜냐면. 동시접속자수가 계속 누적되니까
+방어하기
+웹서비스
+단 location - 주체는 브라우저 - 클라이언트측
+res.sendRedirect - 주체 - Tomcat
+view.forward(req,res)

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.mybatis.mapper.TestMapper"> 
+<resultMap id="empVO" type="com.vo.EmpVO"/>
+<select id="proc_login1" parameterType="java.util.Map" statementType="CALLABLE">
+	{  call proc_login1(#{m_id, jdbcType=VARCHAR, mode=IN, javaType=java.lang.String}
+	,#{m_pw, jdbcType=VARCHAR, mode=IN, javaType=java.lang.String}
+	,#{r_msg, jdbcType=VARCHAR, mode=OUT, javaType=java.lang.String}
+	)}
+</select>
+<select id="proc_empcursor" parameterType="java.util.Map" statementType="CALLABLE">
+	{  call proc_empcursor(#{key, jdbcType=CURSOR, mode=OUT, javaType=java.sql.ResultSet, resultMap=empVO})}
+</select>
+ <select id="currentTime" parameterType="string" resultType="string"> 
+	SELECT to_char(sysdate, 'YYYY-MM-DD') FROM dual
+ </select> 
+</mapper>

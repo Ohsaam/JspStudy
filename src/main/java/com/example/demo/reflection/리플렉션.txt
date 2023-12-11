@@ -1,0 +1,17 @@
+Reflection
+- 힙 영역에 로드돼 있는 클래스 타입의 객체를 통해 필드/메소드/생성자를 접근제어자와 
+상관없이 사용할 수 있도록 지원하는 API
+- 컴파일 시점이 아닌 런타임 시점에 동적으로 특정 클래스의 정보를 추출해 낼 수 있는
+프로그래밍 기법
+- 주로 프레임워크 또는 라이브러리 개발시 사용됨
+
+https://www.baeldung.com/reflections-library
+
+Reflection 사용하는 프레임워크/라이브러리 소개
+- Spring프레임워크(DI)
+- Test프레임워크(JUnit)
+- JSON Serialization/Deserialization 라이브러리
+
+
+실습 
+- @Controller 설정이 되어 있는 모든 클래스를 찾아서 출력해 본다

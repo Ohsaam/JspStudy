@@ -1,0 +1,42 @@
+@WebServlet으로 서블릿을 URL에 맵핑할 때 사용
+스프링에서는 @RequestMapping이 제공된다
+
+서블릿은 늦은 초기화를 사용한다
+그런데 loadOnStartup을 사용하면 미리 초기화를 해준다
+그리고 뒤에 1번은 우선순위를 나타내는 값이다 - 겹쳐도 된다 
+@WebServlet(urlPatterns={"/hello", "/hello/*"}, loadOnStartup=1)
+
+아래는 맵핑할 때 사용할 수 있는 패턴에 대한 소개인데 
+순번은 우선 순위를 나타낸다
+예를 들어 4번 default mapping은 앞에 1,2,3이 없을 때만 처리한다는 의미임
+
+1. exact mapping - /basic/hello.do  -> http://localhost/basic/hello.do
+
+2. path mappin g - /basic/* ->  http://localhost/basic/hello.do
+http://localhost/basic/
+http://localhost/basic/hello
+http://localhost/basic/test/
+
+3. extension mapping - *.do -> http://localhost/basic/test.do
+http://localhost/basic/ch2/hello.do
+
+4. default mapping - /
+-> http://localhost/basic/
+-> http://localhost/basic/home.do
+-> http://localhost/basic/ch2/
+-> http://localhost/basic/ch2/home
+-> http://localhost/basic/ch2/home.do
+
+Servlet Context는 children과 servletMappings이 있다
+servletMappings는 Map구조이다. 물론 children도 Map구조이다
+key(String)
+/hello - com.demo.HelloServlet - 동적 리소스(서블릿)
+*.jsp - jsp -> 동적 리소스 처리
+/ - default -> 정적 리소스처리(image, css, txt)
+
+스프링의 경우에는 DefaultServlet대신에 DispatcherServlet이 사용된다
+스프링에서는 서블릿을 안쓰고 DispatcherServlet가 모든 요청을 받는다
+
+스프링은 서블릿을 발전 시킨 것이다.
+
+
