@@ -80,6 +80,26 @@ public class NoticeController implements Action {
 		//화면 출력을 ReactJS와 같이 다른 언어 다른 라이브러리를 사용하여 처리해야 할땐
 		//Back-End에서 해야될 일은 JSON포맷으로 응답이 나가도록 처리해주면 된다.
 		//POJO 1-3버전에서는 이 부분도 공통코드로 담아 본다
+		else if("jsonNoticeList2".equals(upmu[1])) {//select
+			logger.info("jsonNoticeList");
+			List<Map<String ,Object>> nList = null;
+			hmb.bind(pMap);
+			nList = nLogic.noticeList(pMap);
+			Gson g = new Gson();
+			String temp = g.toJson(nList);
+			res.setCharacterEncoding("utf-8");
+			res.setContentType("application/json");
+			PrintWriter out = res.getWriter();
+			//out.print(nList);//List-> [], Map -> {deptno=10, dname=영업부}
+			out.print(temp);//[{"deptno":10, "dname":"영업무"}]
+			//응답결과가 페이지가 아닌 경우가 존재한다 
+			//예를들면) json이거나 quill사용시 이미지 이름 일때도 포함된다.
+			//path의 값을 null처리하거나 문자열이 나가는 경우를 고려해야 한다
+			int end = path.toString().length();// -> notice/
+			path.delete(0, end);
+			path.append(temp);//url이 전달되는게 아니라 json형식 즉 문자열이 전달됨
+			
+		}		
 		else if("jsonNoticeList".equals(upmu[1])) {//select
 			logger.info("jsonNoticeList");
 			List<Map<String ,Object>> nList = null;
@@ -91,36 +111,6 @@ public class NoticeController implements Action {
 			path.append("jsonNoticeList.jsp");//jsp를 통해서 나가는 구조이다. 
 			isRedirect = false;//false이면 forward처리됨
 		}		
-		
-		
-
-		else if("jsonNoticeList2".equals(upmu[1])) {//select
-			logger.info("jsonNoticeList");
-			List<Map<String ,Object>> nList = null;
-			hmb.bind(pMap);
-			nList = nLogic.noticeList(pMap);
-			res.setContentType("application/json");
-			res.setCharacterEncoding("UTF-8");
-			Gson g = new Gson();
-			PrintWriter out = res.getWriter(); // 화면에 찍으려고
-			String temp = g.toJson(nList);
-			out.print(nList);
-			out.print(temp);
-			req.setAttribute("nList", nList);
-			//실제 플젝에서는 이렇게 하지 않는다(서블릿단에서 직접 내보낸다) 1-2버전에서는 개선해 본다
-			isRedirect = false;//false이면 forward처리됨
-			int end = path.toString().length();
-			logger.info(end); // 8
-			logger.info("path 원래값"+path); // 8
-			path.delete(0,end);
-			logger.info("pathDelete:" + path); // 빈 문자열
-			path.append(temp);
-			logger.info("path:" +path);
-			
-			
-		}	
-		
-		
 		//jsp - 입력 - action(insert) - 1 - 성공 - action(select) - jsp
 		else if("noticeInsert".equals(upmu[1])) {//insert
 			logger.info("noticeInsert");
@@ -160,7 +150,10 @@ public class NoticeController implements Action {
 				isRedirect = true;
 			}	
 		}else if("imageUpload".equals(upmu[1])) {//delete
-
+			String temp = "avatar.png";
+			int end = path.toString().length();// -> notice/
+			path.delete(0, end);
+			path.append(temp);//url이 전달되는게 아니라 json형식 즉 문자열이 전달됨
 		}// end of imageUpload
 		else if("imageGet".equals(upmu[1])) {//delete		
 
