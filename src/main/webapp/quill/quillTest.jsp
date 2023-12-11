@@ -10,9 +10,7 @@
 <body>
 	<!-- Create the editor container -->
 	<div id="editor22">
-	  <p>Hello World!</p>
-	  <p>Some initial <strong>bold</strong> text</p>
-	  <p><br></p>
+	
 	</div>
 	<!-- Initialize Quill editor 
 	브라우저가 DOM Tree그린다
@@ -64,7 +62,13 @@
 		            contentType: false,
 		            success: function (response) {
 						console.log('avatar.png'+response);
-
+						const url = "http://localhost:8000/notice/imageGet.gd?imageName="+response;
+						//화면에 출력을 보냄
+						const range = quill.getSelection().index;
+						quill.setSelection(range,1);
+						quill.clipboard.dangerouslyPasteHTML(range,)
+						'<img src='+url+' style="width:100%;height: auto;" alt = "image" />'
+		        // 사진이 여기서 들어간다.
 		            },
 		            error: function (err) {
 		                console.log(err);

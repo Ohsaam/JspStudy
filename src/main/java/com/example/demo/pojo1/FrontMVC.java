@@ -122,6 +122,8 @@ public class FrontMVC extends HttpServlet {
 				}
 				else if(af.getPath() == null) { // 파일 업로드 처리 시 -> ActionForward를 통해서 값을 리턴 받을 떄, 
 					// 문제가 발생되니깐 , 이 부분에 대한 해결 프로세스 추가
+					
+					
  					logger.info("path가 null일때");
 				}
 				//슬래쉬가 미포함인 경우

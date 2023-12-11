@@ -1,11 +1,14 @@
 package com.example.demo.pojo1;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
@@ -155,7 +158,10 @@ public class NoticeController implements Action {
 				path.append("noticeError.jsp");
 				isRedirect = true;
 			}	
-		}else if("imageUpload".equals(upmu[1])) {//delete
+		}
+		
+		
+		else if("imageUpload".equals(upmu[1])) {//delete
 			MultipartRequest multi = null;
 			//realFolder는 업로드 시 이 pds에 사진이 올라간다.
 			String realFolder = "C:\\Program Files\\workspace_jsp\\nae2Gym\\src\\main\\webapp\\pds";
@@ -189,14 +195,90 @@ public class NoticeController implements Action {
 		
 		else if("imageGet".equals(upmu[1])) {//delete		
 
+			String b_file = req.getParameter("imageName");
+			// 이 부분은 Jsp에서 받아오는 것이다.
+			String filePath = "C:\\Program Files\\workspace_jsp\\nae2Gym\\src\\main\\webapp\\pds";
+			File file = new File(filePath,b_file.trim());
+			String mimeType = req.getServletContext().getMimeType(file.toString()); 
+			//파일이름을 가지고 
+			
+			// 만약에 마임타입이 없다면?
+			if(mimeType == null)
+			{
+				res.setContentType("application/octet-stream"); 
+			}
+			//b_file (파일 이름)
+			
+			String downName = null;
+			// 파일을 직접 내려받아서 사용
+			FileInputStream fis = null; 
+			ServletOutputStream sos = null; // WAS 에서 제공하는 서블릿클래스 무조건 예외처리를 해주어야한다.
+			
+			try {
+				
+				if(req.getHeader("user-agen").indexOf("MSIE")== -1)
+				{
+					downName = new String(b_file.getBytes("UTF-8"), "8859-1"); //국제표준규격-다국어지원
+				}else {
+					
+					downName = new String(b_file.getBytes("EUC-KR"), "8859-1"); // 한국 표준 규격
+				}
+				res.setHeader("Content-Disposition","attachment;filename="+downName);
+				fis = new FileInputStream(file);
+				sos = res.getOutputStream(); // 얻어와서 quill 에디터에 뿌려줘야한다.
+				byte b[] = new byte[1024*10];
+				int data = 0;
+				while((data = (fis.read(b,0,b.length)))!=-1) // fileInputStream를 통해서 매개변수로 b를 주고 길이만큼 읽어들이면서 서블릿에다가 출력을 해야 되는데,
+					//sos.write() 라고 하면 클라이언트쪽에 출력이 나간다.
+				{
+					sos.write(b,0,data);
+				}
+				sos.flush(); // FileInputStream를 사용해서 File객체를 읽음 ( 메모리에 쌓인 정보를 비우는 메소드 호출이다.)
+				isRedirect = true; // null처리를 해준다. path에 대한 정보는 필요없다. -> delete로 날리자.
+				
+				int end = path.toString().length();// -> notice/
+				path.delete(0, end);
+				path = null;
+			}
+
+			catch(Exception e) {
+				logger.info(e.toString());
+			}
+			finally {
+				
+				try {
+					if(sos!=null)
+					{
+						sos.close();
+					}
+					if(fis != null)
+					{
+						fis.close(); 
+					}
+					
+				}catch(Exception e)
+				{
+					
+				}
+			}
 		}// end of imageGet
 		
 		
 		
 		
-		
-		af.setPath(path.toString());			
-		af.setRedirect(isRedirect);//true-> ActionForward - isRedirect - false->true
+		// 이부분도 손을 봐야된다. -> why? 위에서 null처리를 했기 때문에 만약에 가만히 두면 NullPointException이 발생한다.
+		/**
+		 * 1. 파일 업로드 시
+		 * - 파일 업로드 시와 마찬가지로 파일 정보를 얻어올떄도 출력페이지를 내보낼 필요가 없는 경우  
+		 */
+		if(path != null) // null이 아니란 얘기는 응답페이지가 존재하는 경우에만 처리할것.
+		{
+			af.setPath(path.toString());
+		}
+		else {
+			af.setPath(null);
+		}
+		af.setRedirect(isRedirect); // sendRedirect랑 forward를 나누는 경우가 아니라, 경로에 대한 Focus이다.		
 		return af;
 	}
 }
