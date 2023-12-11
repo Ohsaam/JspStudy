@@ -1,11 +1,16 @@
 package com.example.demo.pojo1;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.log4j.Logger;
+
+import com.oreilly.servlet.MultipartRequest;
 import com.util.MyBatisCommonFactory;
 //PURE - 다른 디바이스에 넣어도 잘 동작하면 좋겠어
 //어떠한 인터페이스나 추상클래스도 상속받지 않았다 - 자랑
@@ -79,5 +84,45 @@ public class NoticeLogic {
 		}		
 		return result;
 	}/////////////end of noticeDelete
+	public Map<String, Object> imageUpload(MultipartRequest multi, String realFolder) {
+		logger.info("imageUpload구간입니다.");
+		Enumeration<String> files = multi.getFileNames(); // 소유주 MultipartRequest 리턴타입이 Enumeration
+		// 파일을 읽어오는거니깐 String으로 설정한다.
+		Map<String, Object> pMap = new HashMap<>(); // bs_file를 담아주면된다.
+		String fullPah = null;// 파일 정보에 대한 전체경로
+		String filename = null; //파일이름
+		
+		//첨부파일이 있다면?
+		
+		if(files != null)
+		{
+			File file = null; // file 클래스도 IO쪽에서 제공되는 클래스이다.
+			// 파일 이름을 클래스로 정의하는 객체 ( 파일 객체가 생성되었다고 해서 그 안에 내용까지 포함하진 않는다.
+			// 파일의 크기를 계산해주는 메소드를 지원해주고 있다.
+			while(files.hasMoreElements())
+			{
+				String fname = files.nextElement();
+				filename = multi.getFilesystemName(fname);
+				pMap.put("bs_file", filename);
+				// avatar.png
+				
+				// File객체 생성하기
+				file = new File(realFolder+"\\"+filename);
+			}
+			
+			//첨부파일의 크기를 담기
+			double size = 0;
+			if(file != null) {
+				
+				size = file.length();
+				size = size / (1024);
+				pMap.put("bs_size", size);
+				
+				
+			}
+		}
+		
+		return pMap;
+	}
 	
 }

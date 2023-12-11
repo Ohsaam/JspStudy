@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.util.HashMapBinder;
 /*
  * NoticeController는 서블릿을 상속받지 않았다 - 왜냐면 결합도를 낮추고 싶어서. -그게 프레임워크 중요 사상 하나이니까
@@ -96,8 +98,12 @@ public class NoticeController implements Action {
 			//예를들면) json이거나 quill사용시 이미지 이름 일때도 포함된다.
 			//path의 값을 null처리하거나 문자열이 나가는 경우를 고려해야 한다
 			int end = path.toString().length();// -> notice/
+			logger.info("end : " + end);
 			path.delete(0, end);
+			logger.info("path.delete 결과 : " + path);
 			path.append(temp);//url이 전달되는게 아니라 json형식 즉 문자열이 전달됨
+			// localhost:3000/~~~[{~ }] 방식 이다.
+			logger.info("path.append : " + path);
 			
 		}		
 		else if("jsonNoticeList".equals(upmu[1])) {//select
@@ -150,14 +156,45 @@ public class NoticeController implements Action {
 				isRedirect = true;
 			}	
 		}else if("imageUpload".equals(upmu[1])) {//delete
-			String temp = "avatar.png";
+			MultipartRequest multi = null;
+			//realFolder는 업로드 시 이 pds에 사진이 올라간다.
+			String realFolder = "C:\\Program Files\\workspace_jsp\\nae2Gym\\src\\main\\webapp\\pds";
+			String encType = "utf-8";
+			int maxSize = 5*1024*1024;
+			try {
+				multi = new MultipartRequest(req,realFolder,maxSize,encType, new DefaultFileRenamePolicy());
+			//  DefaultFileRenamePolicy 중복된 이름이 있을 떄 처리해준다.	
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+			Map<String,Object> rmap = nLogic.imageUpload(multi, realFolder);
+			String temp = null;
+			if(rmap != null)
+			{
+				temp = rmap.get("bs_file").toString();
+			}
 			int end = path.toString().length();// -> notice/
 			path.delete(0, end);
 			path.append(temp);//url이 전달되는게 아니라 json형식 즉 문자열이 전달됨
+			
 		}// end of imageUpload
+		
+		/**
+		 * 이 코드는 비동기적으로 처리해야된다.
+		 * post이면서 enctype 바이너리인 경우 전송이 안 된다.
+		 * 그래서 cos.jar를 이용해야된다.
+		 */
+		
+		
 		else if("imageGet".equals(upmu[1])) {//delete		
 
 		}// end of imageGet
+		
+		
+		
+		
+		
 		af.setPath(path.toString());			
 		af.setRedirect(isRedirect);//true-> ActionForward - isRedirect - false->true
 		return af;

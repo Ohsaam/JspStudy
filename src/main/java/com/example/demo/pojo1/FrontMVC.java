@@ -102,23 +102,44 @@ public class FrontMVC extends HttpServlet {
 		//응답페이지를 호출해준다. - 이것이 FrontMVC의 역할이다.
 		//이 지점은 java와 오라클 서버를 경유한 뒤 시점이다.
 		if(af !=null) {
-			if(af.isRedirect()) {
+			if(af.isRedirect()) { // ture이면 sendRedirect인 경우
 				if(af.getPath() == null) {
+					// 첨부파일을 업로드 하는 것은 페이지 이동과 전혀무관하다.
+					// 첨부파일이 처리된 경우 에는 path에 null를 반환하게 한다. 
 					return;
 				}else {
-					res.sendRedirect(af.getPath());					
+					res.sendRedirect(af.getPath());				// notice/noticeList.jsp
+					// 파일 업로드가 아닌경우, 응답으로 나갈 페이지url이 담기는 변수가 path이다.
+					// 이런 부분을 스프링에선 ViewResolver라는 클래스가 지원하는 부분이다.
+				
 				}
 			}
-			else{
+			else{ // false인 경우
 				//슬래쉬가 포함된 경우
 				if(af.getPath().contains("/")) {
 					RequestDispatcher view = req.getRequestDispatcher(af.getPath());
 					view.forward(req, res);					
 				}
-				else if(af.getPath() == null) {
-					logger.info("path가 null일때");
+				else if(af.getPath() == null) { // 파일 업로드 처리 시 -> ActionForward를 통해서 값을 리턴 받을 떄, 
+					// 문제가 발생되니깐 , 이 부분에 대한 해결 프로세스 추가
+ 					logger.info("path가 null일때");
 				}
 				//슬래쉬가 미포함인 경우
+				/**
+				 * 슬래시가 포함되었다는 건 응답으로 나가는 마임타입이 Html이다.
+				 *  - path.append(notice.noticeList.jsp).였음. --> 슬래시갸 있다는 건 응답페이지로 나가는게 HTML이다.
+				 *  
+				 *  아닌 경우는? 
+				 * Json 포맷이라면 당연히 없음
+				 * DataSet인데 무슨 슬래시가 필요한가?
+				 * - Json
+				 * - 문자열 형식(React.Js) 같이 이종간의 언어가 뷰 계층을 담당할 떄 필요하다.
+				 * - Null 일 떄, 이렇게 이미지에 대한 업로드 처리 시 + 첨부파일 처리시엔, 리턴으로 나갈 값이 필요없다.
+				 * - 업로드가 됏다고 해서 사후처리하는 코드는 없다 그 얘기는 null이라는거임
+				 * 
+				 * 슬래스가 null인 경우와 하나인경우
+				 * 
+				 */
 				else {
 					logger.info("슬래쉬가 미포함인 경우 ===> " + af.getPath());
 					res.setCharacterEncoding("utf-8");
