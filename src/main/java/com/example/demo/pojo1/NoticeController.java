@@ -1,6 +1,7 @@
 package com.example.demo.pojo1;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
+
+import com.google.gson.Gson;
 import com.util.HashMapBinder;
 /*
  * NoticeController는 서블릿을 상속받지 않았다 - 왜냐면 결합도를 낮추고 싶어서. -그게 프레임워크 중요 사상 하나이니까
@@ -95,7 +98,12 @@ public class NoticeController implements Action {
 			List<Map<String ,Object>> nList = null;
 			hmb.bind(pMap);
 			nList = nLogic.noticeList(pMap);
-			//원본에다가 담아 두자
+			res.setContentType("application/json");
+			Gson g = new Gson();
+			PrintWriter out = res.getWriter(); // 화면에 찍으려고
+			String temp = g.toJson(nList);
+			out.print(nList);
+			out.print(temp);
 			req.setAttribute("nList", nList);
 			//실제 플젝에서는 이렇게 하지 않는다(서블릿단에서 직접 내보낸다) 1-2버전에서는 개선해 본다
 			path.append("jsonNoticeList.jsp");//jsp를 통해서 나가는 구조이다. 
