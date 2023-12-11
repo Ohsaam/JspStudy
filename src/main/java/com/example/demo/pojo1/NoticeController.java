@@ -88,6 +88,20 @@ public class NoticeController implements Action {
 			path.append("jsonNoticeList.jsp");//jsp를 통해서 나가는 구조이다. 
 			isRedirect = false;//false이면 forward처리됨
 		}		
+		
+		
+		else if("jsonNoticeList2".equals(upmu[1])) {//select
+			logger.info("jsonNoticeList");
+			List<Map<String ,Object>> nList = null;
+			hmb.bind(pMap);
+			nList = nLogic.noticeList(pMap);
+			//원본에다가 담아 두자
+			req.setAttribute("nList", nList);
+			//실제 플젝에서는 이렇게 하지 않는다(서블릿단에서 직접 내보낸다) 1-2버전에서는 개선해 본다
+			path.append("jsonNoticeList.jsp");//jsp를 통해서 나가는 구조이다. 
+			isRedirect = false;//false이면 forward처리됨
+		}	
+		
 		//jsp - 입력 - action(insert) - 1 - 성공 - action(select) - jsp
 		else if("noticeInsert".equals(upmu[1])) {//insert
 			logger.info("noticeInsert");

@@ -19,5 +19,7 @@
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/mysql-connector-j-8.1.0.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/orai18n-11.2.0.3.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/cos-05Nov2002.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/lombok.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
