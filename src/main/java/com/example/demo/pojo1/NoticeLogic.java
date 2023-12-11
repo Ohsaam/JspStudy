@@ -85,44 +85,33 @@ public class NoticeLogic {
 		return result;
 	}/////////////end of noticeDelete
 	public Map<String, Object> imageUpload(MultipartRequest multi, String realFolder) {
-		logger.info("imageUpload구간입니다.");
-		Enumeration<String> files = multi.getFileNames(); // 소유주 MultipartRequest 리턴타입이 Enumeration
-		// 파일을 읽어오는거니깐 String으로 설정한다.
-		Map<String, Object> pMap = new HashMap<>(); // bs_file를 담아주면된다.
-		String fullPah = null;// 파일 정보에 대한 전체경로
-		String filename = null; //파일이름
-		
+		logger.info("imageUpload");
+		Map<String,Object> pMap = new HashMap<>();
+		Enumeration<String> files = multi.getFileNames();
+		String fullPah = null;//파일 정보에 대한 전체경로
+		String filename = null;//파일이름
 		//첨부파일이 있다면?
-		
-		if(files != null)
-		{
-			File file = null; // file 클래스도 IO쪽에서 제공되는 클래스이다.
-			// 파일 이름을 클래스로 정의하는 객체 ( 파일 객체가 생성되었다고 해서 그 안에 내용까지 포함하진 않는다.
-			// 파일의 크기를 계산해주는 메소드를 지원해주고 있다.
-			while(files.hasMoreElements())
-			{
+		if(files !=null) {
+			//파일 이름을 클래스로 정의하는 객체 - 파일객체가 생성되었다고 해서 그 안에 내용까지 포함하진 않음
+			//파일 크기를 계산해주는 메소드 지원함
+			File file = null;
+			while(files.hasMoreElements()) {
 				String fname = files.nextElement();
 				filename = multi.getFilesystemName(fname);
-				pMap.put("bs_file", filename);
-				// avatar.png
-				
-				// File객체 생성하기
+				pMap.put("bs_file", filename);//avartar.png
+				//File객체 생성하기
 				file = new File(realFolder+"\\"+filename);
 			}
-			
 			//첨부파일의 크기를 담기
 			double size = 0;
-			if(file != null) {
-				
+			if(file !=null) {
 				size = file.length();
-				size = size / (1024);
+				size = size/(1024);
 				pMap.put("bs_size", size);
-				
-				
 			}
 		}
-		
 		return pMap;
+		//return pMap;
 	}
 	
 }

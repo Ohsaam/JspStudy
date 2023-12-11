@@ -9,9 +9,7 @@
 </head>
 <body>
 	<!-- Create the editor container -->
-	<div id="editor22">
-	
-	</div>
+	<div id="editor22"></div>
 	<!-- Initialize Quill editor 
 	브라우저가 DOM Tree그린다
 	CSS 포함하는 DOM Tree 그린다
@@ -61,14 +59,12 @@
 		            processData: false,
 		            contentType: false,
 		            success: function (response) {
-						console.log('avatar.png'+response);
-						const url = "http://localhost:8000/notice/imageGet.gd?imageName="+response;
-						//화면에 출력을 보냄
+						console.log('avatar.png'+response);//avartar.png
+						const url = "http://localhost:8000/notice/imageGet.gd?imageName="+response;//
 						const range = quill.getSelection().index;
-						quill.setSelection(range,1);
-						quill.clipboard.dangerouslyPasteHTML(range,)
-						'<img src='+url+' style="width:100%;height: auto;" alt = "image" />'
-		        // 사진이 여기서 들어간다.
+						quill.setSelection(range, 1);
+						quill.clipboard.dangerouslyPasteHTML(range,
+								'<img src='+url+' style="width:100%;height: auto;" alt="image" />');
 		            },
 		            error: function (err) {
 		                console.log(err);
