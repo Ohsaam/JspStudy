@@ -102,7 +102,10 @@ public class NoticeController implements Action {
 			//path의 값을 null처리하거나 문자열이 나가는 경우를 고려해야 한다
 			int end = path.toString().length();// -> notice/
 			path.delete(0, end);
-			path.append(temp);//url이 전달되는게 아니라 json형식 즉 문자열이 전달됨
+			path.append(temp);//url이 전달되는게 아니라 json형식 즉 문자열이 전달됨\
+			logger.info(path.toString()==null); // false이다.
+			logger.info("Controller에 들어왔습니다.");
+
 			
 		}		
 		else if("jsonNoticeList".equals(upmu[1])) {//select
@@ -172,10 +175,12 @@ public class NoticeController implements Action {
 				temp = rmap.get("bs_file").toString();
 			}
 			int end = path.toString().length();// -> notice/
+			logger.info(end);
 			path.delete(0, end);
 			path.append(temp);//url이 전달되는게 아니라 json형식 즉 문자열이 전달됨
+			logger.info(temp);
 		}// end of imageUpload
-		//http://localhost:8000/notice/imageGet.gd?imageName=avatar25.png
+		//http://localhost:8000/notice/imageGet.gd?imageName=avatar.png
 		else if("imageGet".equals(upmu[1])) {//첨부파일을 처리할 때 다운로드 처리하는 화면에서 사용할 코드 소개함
 			String b_file = req.getParameter("imageName");// avartar.png
 			logger.info("111 => " +b_file);
@@ -183,6 +188,7 @@ public class NoticeController implements Action {
 			File file = new File(filePath, b_file.trim());
 			logger.info("222 => " + file );
 			String mimeType = req.getServletContext().getMimeType(file.toString());
+			// 서블릿 컨텍스트를 통해 MIME 타입을 가져오는 코드이다.
 			if(mimeType == null) {
 				res.setContentType("application/octet-stream");
 			}
@@ -196,7 +202,7 @@ public class NoticeController implements Action {
 					downName = new String(b_file.getBytes("EUC-KR"), "8859_1");	//한국 표준 규격				
 				}
 				res.setHeader("Content-Disposition", "attachment;filename="+downName);
-				logger.info("333");
+				logger.info("333 + downName" + downName);
 				fis = new FileInputStream(file);
 				logger.info(fis);
 				sos = res.getOutputStream();
@@ -207,11 +213,14 @@ public class NoticeController implements Action {
 					sos.write(b,0,data);
 				}
 				sos.flush();//FileInputStream을 사용해서 file객체를 읽음- 메모리에 쌓인 정보를 비우는 메소드 호출 
-				isRedirect = true;//null처리를 해둠
+				isRedirect = true;//null처리를 해둠 
+				
+				// true면 sendRedirect인데, path를 밑에서 자르기 때문에 sendRedirect하는게 의미가 있을까?
+				
 				logger.info(path);
 				int end = path.toString().length();// -> notice/
 				path.delete(0, end);
-				path = null;
+				path = null; // path는 null값이 찍힌다.
 			} catch (Exception e) {
 				logger.info(e.toString());
 			} finally {

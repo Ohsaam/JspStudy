@@ -49,8 +49,8 @@
 		    fileInput.addEventListener("change", function () {  // change 이벤트로 input 값이 바뀌면 실행
 		        const formData = new FormData();
 		        const file = fileInput.files[0];
-		        formData.append('image', file);
-
+		        formData.append('image', file);//// formData.append(name, value) – name과 value를 가진 폼 필드 추가.
+		        
 		        $.ajax({//<form method=post enctype=multipart/form-data/> 이럴경우 req.getParameter사용이 불가함 -> cos.jar
 		            type: 'post',
 		            enctype: 'multipart/form-data',

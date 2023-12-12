@@ -122,11 +122,6 @@ public class FrontMVC extends HttpServlet {
 				else if(af.getPath() == null) {//파일 업로드 처리시 ActionForward를 통해서 값을 리턴 받을때 문제가 발생됨. 이부분에 대한 해결  프로세스 추가하였다.
 					logger.info("path가 null일때");
 				}
-				//슬래쉬가 미포함인 경우
-				//-> 슬래쉬가 포함되었다는건 응답으로 나가는 마임타입이 html이다. path.append(notice/noticeList.jsp)
-				//1.  json 포맷이라면 당연히 없음
-				//2. 문자열 형식일때 - ReactJS와 같이 이종간의 언어가 뷰계층을 담당할 때 필수템
-				//3. null일때 - 이미지 업로드 처리시나 첨부파일 처리시에는 리턴으로 나갈 값이 필요없다.
 				else {
 					logger.info("슬래쉬가 미포함인 경우 ===> " + af.getPath());
 					res.setCharacterEncoding("utf-8");

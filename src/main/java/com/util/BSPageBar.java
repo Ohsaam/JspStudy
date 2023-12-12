@@ -2,6 +2,11 @@ package com.util;
 
 import org.apache.log4j.Logger;
 
+/**
+ * StringBuilder를 사용한 이유는 String 사용 시 + 하게 되면 원본은 수정되지않고 계속 객체가 생성되니깐 
+ * StringBuilder 를 사용함.
+ */
+
 public class BSPageBar {
 	Logger logger = Logger.getLogger(BSPageBar.class);
 	//전체레코드 갯수
@@ -44,7 +49,18 @@ public class BSPageBar {
 		this.totalRecord = totalRecord;
 		this.nowPage = nowPage;
 		this.pagePath = pagePath;
-		
+		/**
+		 * pagePath 공지사항 페이징처리인가 아님 게시판에 페이징처리인가?
+		 * 1. /notice/noticeList.gd 전체 레코드의 숫자에 따라서 내가 위치한 값이 달라지니깐 매 번 계산이 되어야한다.
+		 * 2. 만약에 이렇게 온다면 에러다.
+		 * 
+		 *  /notice/noticeList.gd?&
+		 *  -> /notice/noticeList.gd? 
+		 *  -> &nowPage 이걸 쓰면 터진다. 
+		 *  -> 왜? /notice/noticeList.gd? &nowPage 이렇게 나오니깐 
+		 *  ->?
+		 * 
+		 */
 		this.totalPage = 
 				(int)Math.ceil((double)this.totalRecord/this.numPerPage);// 47.0/10=> 4.7 4.1->5page 4.2->5page
 		this.totalBlock= 
@@ -85,7 +101,7 @@ public class BSPageBar {
 			//a태그 활용하여 링크 처리하기
 			if(totalBlock > nowBlock+1) {
 				pageLink.append("<li class='page-item'>");
-				pageLink.append("<a class='page-link' aria-label='Next' href='"+pagePath+"&nowPage="+((nowBlock+1)*pagePerBlock)+"'>");
+				pageLink.append("<a class='page-link' aria-label='Next' href='"+pagePath+"?nowPage="+((nowBlock+1)*pagePerBlock)+"'>");
 				pageLink.append("<span aria-hidden=\"true\">&raquo;</span>");
 				pageLink.append("</a>");	
 				pageLink.append("</li>");
