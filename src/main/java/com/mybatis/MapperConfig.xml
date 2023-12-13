@@ -23,5 +23,6 @@
 	<mappers>
 		<mapper resource="com/mybatis/mapper/test.xml" />
 		<mapper resource="com/mybatis/mapper/notice.xml" />
+		<mapper resource="com/mybatis/mapper/board.xml" />
 	</mappers>
 </configuration>

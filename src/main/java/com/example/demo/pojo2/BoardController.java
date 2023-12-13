@@ -28,52 +28,11 @@ public class BoardController implements Controller{
 	
 	@Override
 	public String execute(HttpServletRequest req, HttpServletResponse res) {
-	
+		String upmu[] = (String[])req.getAttribute("upmu");//notice, noticeList or noticeInsert or noticeUpdate or noticeDelete -  분기
 		String path = null;
 		
-		if(true)
-		{
-			path="1";
-		}
-		// 전체조회일 떄 -  SELECT - n건 - List<Map|VO> - list.jsp - 상세보기와 응답페이지이름이 달라서 메소드를 분리한다.
-		/**
-		 *  배포위치가 WEB-INF 일 떄,
-		 *  
-		 *  배포위치가 Wepapp일 떄, -> /WEB-INF/(WorkName)/메소드이름 or 업무배열의 1번의 이름.jsp 구조여야 한다.
-		 *  2가지 경우가 있다는 건 변수를 생각해야된다.
-		 */
 		
-		// 상세조회일 떄, SELECT - 1건 - Map or VO괜찮아. - read.jsp 
-		else if(true)
-		{
-			path="2";
-		}
-		
-		
-		
-		// 등록일 떄, post방식 - insert (1)
-		else if(true)
-		{
-			path="3";
-		}
-		
-		
-		// 수정일 떄 , Get방식 update (1-수정성공 or0-수정x)
-		else if(true)
-		{
-			path="4";
-		}
-		
-		// 삭제일 떄, : delete방식 
-		else
-		{
-			path="5";
-		}
-		
-		
-		
-		
-		
+
 		
 		
 		return path;

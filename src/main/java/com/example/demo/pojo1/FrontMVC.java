@@ -128,6 +128,7 @@ public class FrontMVC extends HttpServlet {
 					res.setContentType("text/plain;utf-8");
 					PrintWriter out = res.getWriter();
 					out.print(af.getPath());
+					logger.info(af.getPath());
 					return;					
 				}
 			}

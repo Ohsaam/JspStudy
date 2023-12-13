@@ -18,6 +18,9 @@
           <a class="nav-link active" href="/notice/noticeList.gd">공지사항</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="/board/noticeList.gd">게시판</a>
+        </li>        
+        <li class="nav-item">
           <a class="nav-link" href="#">회원관리</a>
         </li>
         <li class="nav-item">

@@ -177,7 +177,7 @@ public class NoticeController implements Action {
 			int end = path.toString().length();// -> notice/
 			logger.info(end);
 			path.delete(0, end);
-			path.append(temp);//url이 전달되는게 아니라 json형식 즉 문자열이 전달됨
+			path.append(temp);
 			logger.info(temp);
 		}// end of imageUpload
 		//http://localhost:8000/notice/imageGet.gd?imageName=avatar.png
