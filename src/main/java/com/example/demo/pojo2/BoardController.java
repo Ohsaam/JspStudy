@@ -3,6 +3,7 @@ package com.example.demo.pojo2;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import com.example.demo.pojo1.FrontMVC;
 import com.google.gson.Gson;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.util.HashMapBinder;
 
 /**
  * PageMove[] - 올라올 때,
@@ -33,28 +35,29 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 public class BoardController implements Controller{
 
 	Logger logger = Logger.getLogger(BoardController.class);
-	BoardLogic nLogic = new BoardLogic();
+	BoardLogic bLogic = new BoardLogic();
 	
 	
 	@Override
 	public String execute(HttpServletRequest req, HttpServletResponse res) {
 		String upmu[] = (String[])req.getAttribute("upmu");//notice, noticeList or noticeInsert or noticeUpdate or noticeDelete -  분기
 		String path = null;
+		Map<String, Object> pMap = new HashMap<>();
+		HashMapBinder hmb = new HashMapBinder(req);
 		
 		if("boardList".equals(upmu[1])) {//select
-			logger.info("BoardList");
+			logger.info("BoardController클래스 안 : if ==>boardList");
 			List<Map<String ,Object>> bList = null;//nList.size()가 n개 
 			hmb.bind(pMap);  
 			bList = bLogic.boardList(pMap);
-			//원본에다가 담아 두자
 			req.setAttribute("bList", bList);
-			path.append("boardList.jsp");
-			isRedirect = false;//false이면 forward처리됨
+			//페이지를 결정한다. 라고 했을 떄, 
+			path = "forward:/board/boardList.jsp"; // 결정은 여기서 하더라고 리턴을 해줘야된다. 맨 아래
 		}
 		
 		else if("boardDetail".equals(upmu[1]))
 		{
-				logger.info("boardDetail");
+				logger.info("BoardController클래스 안 : if ==>boardDetail");
 				List<Map<String ,Object>> bList = null;//nList.size()=1
 				// NoticeLogic의 메소드 호출 - 객체주입 - 내가(책임) 아님 스프링(제어역전)
 				//select * from notice where n_no=5;
@@ -62,68 +65,52 @@ public class BoardController implements Controller{
 				bList = bLogic.boardList(pMap);
 				//원본에다가 담아 두자
 				req.setAttribute("bList", bList);
-				path.append("boardDetail.jsp");
-				isRedirect = false;//false이면 forward처리됨
+				path = "forward:/board/boardDetail.jsp";
+				
 			}
 		
 		else if("boardInsert".equals(upmu[1])) {//insert
-			logger.info("boardInsert");
+			logger.info("BoardController클래스 안 : if ==>boardInsert");
 			int result = 0;
 			hmb.bind(pMap);
 			result = bLogic.boardInsert(pMap);
 			if(result == 1) {
-				path.append("boardList.gd");
-				isRedirect = true;//sendRedirect
+				path = "redirect:/board/boardList.gd2";
 			}else {
-				path.append("boardError.jsp");
-				isRedirect = true;
+				path = "redirect:/board/boardError.jsp";
+			}
+			
 			}
 		
 			else if("boardUpdate".equals(upmu[1])) {//update
-				logger.info("boardUpdate");
+				logger.info("BoardController클래스 안 : if ==>boardUpdate");
 				int result = 0;
 				hmb.bind(pMap);
 				result = bLogic.boardUpdate(pMap);
 				if(result == 1) {
-					path.append("boardList.gd");
-					isRedirect = true;
+					path = "redirect:/board/boardList.gd2";
 				}else {
-					path.append("boardError.jsp");
-					isRedirect = true;
+					path = "redirect:/board/boardError.jsp";
 				}
+			}
 				
 				
 				else if("boardDelete".equals(upmu[1])) {//delete
-					logger.info("boardDelete");
+					logger.info("BoardController클래스 안 : if ==>boardDelete");
 					int result = 0;
 					hmb.bind(pMap);
 					result = bLogic.boardDelete(pMap);
 					if(result == 1) {
-						path.append("boardList.gd");
-						isRedirect = true;
+						path = "redirect:/board/boardList.gd2";
 					}else {
-						path.append("boardError.jsp");
-						isRedirect = true;
-					}			
+						path = "redirect:/board/boardError.jsp";
+				}}			
 
-		
-					
-					
+		// 요청이 유지되는 것으로 판단해서 서블릿이 쥐고 있는것을 jsp 사용가능
 		
 		return path;
-		
-		
-		
-	//	return "redirect:/notice/noticeList.jsp"; // webapp
-	//	return "forward:/notice/noticeList.jsp"  & webapp
-   //   return "/notice/noticeList"; ==> WEB-INF/jsp/notice아래 
-		
-		
-		
-		// 요청이 유지되는 것으로 판단해서 서블릿이 쥐고 있는것을 jsp 사용가능
 	}
-	
-	
-
-
 }
+	
+	
+
