@@ -9,6 +9,11 @@ import java.util.Enumeration;
 public class HashMapBinder {
 	Logger logger = Logger.getLogger(HashMapBinder.class);
 	HttpServletRequest req = null;
+	
+	MultipartRequest multi  = null;
+	String realFolder = "C:\\Program Files\\workspace_jsp\\nae2Gym\\src\\main\\webapp\\pds";
+	String encType = "utf-8";
+	int maxSize = 5*1024*1024;
 	public HashMapBinder(HttpServletRequest req) {
 		this.req = req;
 	}
