@@ -78,7 +78,7 @@ public class BoardController implements Controller {
 			bList = bLogic.boardList(pMap);
 			//원본에다가 담아 두자
 			req.setAttribute("bList", bList);
-			path="forward:board/boardDetail";
+			path="forward:/board/boardDetail.jsp";
 		}
 		
 		//공통분모 - 반환값이 int이다,  commit과 rollback대상이다
@@ -88,10 +88,13 @@ public class BoardController implements Controller {
 		else if("boardInsert".equals(upmu[1])) {//insert
 			logger.info("boardInsert");
 			int result = 0;
-			hmb.multiBinder(pMap);
+			//hmb.bind(pMap);
+			//post방식은 매번 동일한 url을 요청 하더라도 무조건 서버를 경유함
+			//get방식은 같은 url이면 인터셉트 당함-  302
+			hmb.multiBind(pMap);//첨부파일이 포함된 post방식의 처리일때만 - get방식은 무조건 첨부파일 안됨
 			result = bLogic.boardInsert(pMap);
 			if(result == 1) {//글등록 성공했을때
-				path="redirect:board/boardList";//jsp --(redirect)---->boardInsert.gd2 -----(redirect)------> boardList.gd2 --(forward)---> jsp
+				path="redirect:/board/boardList.gd2";//jsp --(redirect)---->boardInsert.gd2 -----(redirect)------> boardList.gd2 --(forward)---> jsp
 			}else {
 				path="redirect:/board/boardError.jsp";
 			}
@@ -102,10 +105,11 @@ public class BoardController implements Controller {
 		else if("boardUpdate".equals(upmu[1])) {//update
 			logger.info("boardUpdate");
 			int result = 0;
-			hmb.bind(pMap);
+			hmb.bind(pMap);//pMap.get(b_no)=5
+			logger.info(pMap);
 			result = bLogic.boardUpdate(pMap);
 			if(result == 1) {//글등록 성공했을때
-				path="redirect:board/boardList";
+				path="redirect:/board/boardList.gd2";
 			}else {
 				path="redirect:/board/boardError.jsp";
 			}
@@ -115,12 +119,15 @@ public class BoardController implements Controller {
 		//삭제일때 - delete방식 - 스프링수업일땐  - delete:1(수정성공) or 0(수정안됨)
 
 		else if("boardDelete".equals(upmu[1])) {//delete
-			logger.info("noticeDelete");
+			logger.info("boardDelete");
 			int result = 0;
 			hmb.bind(pMap);
 			result = bLogic.boardDelete(pMap);
 			if(result == 1) {//글등록 성공했을때
-				path="redirect:board/boardList";
+			//pageMove[0] = redirect
+			//pageMove[1] = /board/boardList.gd2
+			//upmu 가져가나? 아님 pageMove인가요?	
+				path="redirect:/board/boardList.gd2";
 			}else {
 				path="redirect:/board/boardError.jsp";
 			}
@@ -133,6 +140,31 @@ public class BoardController implements Controller {
 		//return "/notice/noticeList";//WEB-INF/jsp/notice아래
 	}////////////// end of execute
 }//////////////// end of BoardController
+
+//전체 문자열 -> "redirect:/workname-컨트롤클래스이름결정/메소드이름(if문조건문)
+//pageMove[]
+//pageMove[0] = "redirect" or "forward"
+//pageMove[1] = "/notice/noticeList.jsp"  or "/board/boardList.jsp"
+// 루트 태그 떼어내고 확장자를 떼어내면 notice/noticeList -> split, splice
+
+//입력을 처리할 때
+// insert(action) -> "redirect:/board/boardList.gd2" -> path -> ActionServlet -> pageMove[0]=redirect
+//, pageMove[1]= board/boardList.gd2 -> split("/") -> pageMove[0]=board, pageMove[1]=boardList.gd2
+//path에 담김 -> res.sendRedirect("/"+path+".jsp") -> http://localhost:8000/board/boardList.gd2.jsp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //전체 문자열 -> "redirect:/workname-컨트롤클래스이름결정/메소드이름(if문조건문)
 //pageMove[]
