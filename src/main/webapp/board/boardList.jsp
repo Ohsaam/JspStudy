@@ -50,8 +50,12 @@
 		    form.submit();
 		}
 		
+		const fileDown = (b_file) =>{
+			location.href="downLoad.jsp?b_file="+b_file;
+		}
 		
-		
+		// 브라우저는 자기가 모르는 마임타입은 다운로드 처리한다.
+		// 다운로드 downLoad.jsp?b_file="b_file로 넘어간다.
 		
 	</script>
 </head>
