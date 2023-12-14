@@ -25,6 +25,13 @@
 		function boardList(){
 			location.href="/board/boardList.gd2";
 		}
+		const searchEnter = (event) =>{
+			console.log("search Enter")
+			if(window.event.keyCode == 13)
+				{
+				boardSearch();
+				}
+		}
 		function	boardSearch(){
 	    	console.log("boardList()클릭");
 	    	const gubun = document.querySelector("#gubun").value;
@@ -32,6 +39,8 @@
 			console.log(`${gubun} , ${keyword}`);
 			location.href="/board/boardList.gd2?gubun="+gubun+"&keyword="+keyword;
 	    }
+		
+
 		
 
 		function boardInsert(){
@@ -72,7 +81,7 @@
 		           aria-label="검색어를 입력하세요" aria-describedby="btn_search" onkeyup="searchEnter()"/>
 			</div>
 			<div class="col-3">
-		 		<button id="btn_search" class="btn btn-danger" onClick="boardSearch()">검색</button>
+		 		<button id="btn_search" class="btn btn-danger" onclick="boardSearch()">검색</button>
 		 	</div>
 		</div>		
 		<!-- 검색기 끝 -->
@@ -149,8 +158,9 @@
 	      </div>
 	      <!-- Modal body -->
 	      <div class="modal-body">
+	      <!-- enctype="multipart/form-data" -->
 	      	<!-- <form id="f_board" method="get" action="./boardInsert.pj2"> -->
-	      	<form id="f_board" method="post"  action="./boardInsert.gd2">
+	      	<form id="f_board" method="post"    action="./boardInsert.gd2">
 	      	  <input type="hidden" name="method" value="boardInsert">
 	          <div class="form-floating mb-3 mt-3">
 	            <input type="text"  class="form-control" id="b_title" name="b_title" placeholder="Enter 제목" />

@@ -92,7 +92,7 @@ public class BoardController implements Controller {
 		else if("boardInsert".equals(upmu[1])) {//insert
 			logger.info("boardInsert");
 			int result = 0;
-			hmb.bind(pMap);
+			hmb.multiBinder(pMap);
 			result = bLogic.boardInsert(pMap);
 			if(result == 1) {//글등록 성공했을때
 				path="redirect:board/boardList";//jsp --(redirect)---->boardInsert.gd2 -----(redirect)------> boardList.gd2 --(forward)---> jsp

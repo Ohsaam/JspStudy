@@ -42,37 +42,42 @@ public class HashMapBinder {
 		//이미지 처리말고 Post에서 첨부파일에 있는 포스트 방식일 때 사용하는 메소드
 		//첨부파일이 아닌 다른 정보에 대해서 받아준다.
 		Enumeration<String> em = req.getParameterNames();
+
+		logger.info(em.toString());
 		while(em.hasMoreElements()) {
 			//키값 꺼내기
 			String key = em.nextElement();//n_title, n_content, n_writer
+			logger.info(key+":::::"+req.getParameter(key));
 			pMap.put(key, req.getParameter(key));
+			logger.info(pMap.toString());
 		}////////////// end of while
 		
 		
 		// 첨부파일에 대한 처리를 말함.
-		Enumeration<String> files = multi.getFileNames();
-		String fullPah = null;//파일 정보에 대한 전체경로
-		String filename = null;//파일이름
-		//첨부파일이 있다면?
-		if(files !=null) {
-			//파일 이름을 클래스로 정의하는 객체 - 파일객체가 생성되었다고 해서 그 안에 내용까지 포함하진 않음
-			//파일 크기를 계산해주는 메소드 지원함
-			File file = null;
-			while(files.hasMoreElements()) {
-				String fname = files.nextElement();
-				filename = multi.getFilesystemName(fname);
-				pMap.put("bs_file", filename);//avartar.png
-				//File객체 생성하기
-				file = new File(realFolder+"\\"+filename);
-			}
-			//첨부파일의 크기를 담기
-			double size = 0;
-			if(file !=null) {
-				size = file.length();
-				size = size/(1024);
-				pMap.put("bs_size", size);
-			}
-		}
+//		Enumeration<String> files = multi.getParameterNames();
+//		String fullPah = null;//파일 정보에 대한 전체경로
+//		String filename = null;//파일이름
+//		//첨부파일이 있다면?
+//		if(files !=null) {
+//			//파일 이름을 클래스로 정의하는 객체 - 파일객체가 생성되었다고 해서 그 안에 내용까지 포함하진 않음
+//			//파일 크기를 계산해주는 메소드 지원함
+//			File file = null;
+//			while(files.hasMoreElements()) {
+//				String fname = files.nextElement();
+//				filename = multi.getFilesystemName(fname);
+//				pMap.put("bs_file", filename);//avartar.png
+//				//File객체 생성하기
+//				file = new File(realFolder+"\\"+filename);
+//				logger.info("while files 들어오니?");
+//			}
+//			//첨부파일의 크기를 담기
+//			double size = 0;
+//			if(file !=null) {
+//				size = file.length();
+//				size = size/(1024);
+//				pMap.put("bs_size", size);
+//			}
+//		}
 		
 	}
 	
