@@ -33,6 +33,13 @@
 			location.href="/board/boardList.gd2?gubun="+gubun+"&keyword="+keyword;
 	    }
 		
+		
+		const searchEnter = (event) =>{
+			if(window.event.keyCode ==13)
+				{
+				boardSearch();
+				}
+		}
 
 		function boardInsert(){
 			
@@ -42,6 +49,7 @@
 		    console.log(form)
 		    form.submit();
 		}
+		
 		
 		
 		
@@ -102,9 +110,11 @@
 					<tr>
 						<td><%=rmap.get("B_NO") %></td>
 						<td><%=rmap.get("B_TITLE") %></td>
-						<td><%=rmap.get("B_FILE") %></td>
+						<td>
+						<a href="javascript:fileDown('<%= rmap.get("B_FILE") %>')"><%=rmap.get("B_FILE") %></a>
+						</td>
 						<td><%=rmap.get("B_WRITER") %></td>
-						<td><%=rmap.get("B_hit") %></td>
+						<td><%=rmap.get("B_HIT") %></td>
 					</tr>					
 <%
 	}
@@ -157,6 +167,8 @@
 	            <label for="b_title">제목</label>
 	          </div>	      	
 	          <div class="form-floating mb-3 mt-3">
+	          
+	          
 	            <input type="text"  class="form-control" id="b_writer" name="b_writer" placeholder="Enter 작성자" />
 	            <label for="b_writer">작성자</label>
 	          </div>	      	
