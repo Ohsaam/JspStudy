@@ -42,10 +42,6 @@ import com.util.HashMapBinder;
  */
 //@Controller - 스프링에서는 클래스 사이의 결합도를 낮추기 위해 상속(결합도가 높아지니까....)을 포기하였다
 //@RequestMapping(/notice/*) - 2번 URL매핑
-import com.google.gson.Gson;
-import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-import com.util.HashMapBinder;
 public class BoardController implements Controller {
 	Logger logger = Logger.getLogger(BoardController.class);
 	BoardLogic bLogic = new BoardLogic();//이른
@@ -143,5 +139,3 @@ public class BoardController implements Controller {
 //pageMove[0] = "redirect" or "forward"
 //pageMove[1] = "/notice/noticeList.jsp"  or "/board/boardList.jsp"
 // 루트 태그 떼어내고 확장자를 떼어내면 notice/noticeList -> split, splice
-
-
