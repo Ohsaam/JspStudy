@@ -73,18 +73,7 @@ public class FrontMVC extends HttpServlet {
 		////////////////////////[[  어떤 컨트롤러를 태울것인가? ]]/////////////////////////
 		//이 지점은 내려가는 방향이다
 		if("notice".equals(upmu[0])) {
-			//왜 NoticeController클래스에 upmu[]을 넣어주나요? - 메소드
-			//메소드 이름을 가지고 NoticeController에서 if문(조건식이 필요함-upmu[1])을 적어야 한다.
-			//4가지 - noticeList, noticeInsert, noticeUpdate, noticeDelete
-			//왜냐면 NoticeController에서 NoticeLogic클래스를 인스턴스화 해야 하니까
-			//왜요? NoticeLogic에 정의된 메소드를 여기서 호출해야 하니까...
-			//설계 관점 아쉬움 - 우리는 XXXController에서 부터 메소드를 가질 수 없었나?
-			//이유- 나는 아직은 메소드마다 req, res에 대한 객체 주입을 처리할 수 없는 구조이니까
 			req.setAttribute("upmu",upmu);
-			//컨트롤러가 결정된 이름으로 메소드가 호출되고 있다. - 별로다 - 메소드마다 url패턴을 적용할 수 없어서 if문으로 처리하였다
-			//스프링에서는 메소드마다 매핑을 지원하는 어노테이션(@RequestMapping, @GetMpping, @PostMapping)이 지원되고 있다
-			//그런데 나는 이런 설계가 안되어서 getRequestURI()  -> upmu[0]=notice, upmu[1]=noticeList
-			// req.setAttribute("upmu", upmu);
 			af = nc.execute(req, res);//NoticeController클래스로 건너감 - upmu[1]-메소드이름이니까...
 		}
 
@@ -94,27 +83,15 @@ public class FrontMVC extends HttpServlet {
 		else if("lecture".equals(upmu[0])) {
 			
 		}
-		//////////////////////////////////{{ *.gd 어떤 컨트롤클래스를 주입받아야 하는가?  }}//////////////////////////////////////
-		
-		//////////////////////[[ 컨트롤을 타고 난 뒤에 내가 할일은? ]]///////////////////////
-		//해당 업무에 대응하는 컨트롤러에서 결정된 페이지 이름을 받아온다
-		//위에서 결정된 true 혹은 false값에 따라 sendRedirect와 forward를 통해
-		//응답페이지를 호출해준다. - 이것이 FrontMVC의 역할이다.
-		//이 지점은 java와 오라클 서버를 경유한 뒤 시점이다.
 		if(af !=null) {
 			if(af.isRedirect()) {//true라는 건 sendRedirect인 경우임
-				//첨부파일을 업로드 하는 것은 페이지 이동과 전혀 무관하다
-				//첨부파일이 처리된 경우에는 path에 null을 반환하게 한다
 				if(af.getPath() == null) {
 					return;//해당메소드 탈출
 				}else {
-					//파일업로드가 아닌 경우 응답으로 나갈 페이지 url이 담기는 변수가 path이다.
-					//이런 부분들을 스프링에서는 XXXXViewResolver라는 클래스가 지원하는 부분
 					res.sendRedirect(af.getPath());// -> notice/noticeList.jsp					
 				}
 			}
 			else{//forward인 경우임 - url안바뀜, 화면은 바뀜, 유지됨. a페이지에서 쥐고 있는 정보를 b페이지에서도 사용가능함
-				//슬래쉬가 포함된 경우
 				if(af.getPath().contains("/")) {
 					RequestDispatcher view = req.getRequestDispatcher(af.getPath());
 					view.forward(req, res);					

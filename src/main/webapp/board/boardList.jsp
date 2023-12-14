@@ -1,16 +1,50 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>    
 <!DOCTYPE html>
+<%
+	int size = 0;
+	List <Map<String,Object>> bList = (List)request.getAttribute("bList");
+	if(bList != null)
+	{
+		size = bList.size();
+	}
+	
+	out.print(size);
+
+%>
+
 <html>
 <head>
 <meta charset="UTF-8">
 <title>게시판(webapp)</title>
+
     <%@include file="/common/bootstrap_common.jsp" %>
 	<link rel="stylesheet" href="/css/board.css">
-	<script type = "text/javascript">
-	funtion boardList(){
-		location.href = "/board/boardList.gd2";
-	}
+	<script type="text/javascript">
+		function boardList(){
+			location.href="/board/boardList.gd2";
+		}
+		function	boardSearch(){
+	    	console.log("boardList()클릭");
+	    	const gubun = document.querySelector("#gubun").value;
+			const keyword = document.querySelector("#keyword").value;
+			console.log(`${gubun} , ${keyword}`);
+			location.href="/board/boardList.gd2?gubun="+gubun+"&keyword="+keyword;
+	    }
+		
+
+		function boardInsert(){
+			
+			// post방식으로 어떻게 처리하지? -> 폼태그 전송까지 완료함.->근데 디비에 삽입이 안된다.(action태그확인완료)
+			// 모르겠으니깐 get방식으로 진행해보자
+		    let form = document.getElementById("f_board");
+		    console.log(form)
+		    form.submit();
+		}
+		
+		
+		
 	</script>
 </head>
 <body>
@@ -55,7 +89,29 @@
 		        		<th width="15%">조회수</th>
 		      		</tr>
 		    	</thead>
-		    	<tbody>	      		
+		    	<tbody>	
+		    	
+<%
+	//스크립틀릿 - 지변이다, 메소드 선언불가, 생성자 선언불가, 실행문
+	//n건을 조회하는 경우이지만 resultType에는 map이나 vo패턴을 주는게 맞다
+	//주의사항 - 자동으로 키값을 생성함 - 디폴트가 대문자이다
+	//myBatis연동시 resultType=map{한행}으로 줌 -> selectList("noticeList", pMap)
+	for(int i=0;i<size;i++){
+		Map<String,Object> rmap = bList.get(i);
+%>					
+					<tr>
+						<td><%=rmap.get("B_NO") %></td>
+						<td><%=rmap.get("B_TITLE") %></td>
+						<td><%=rmap.get("B_FILE") %></td>
+						<td><%=rmap.get("B_WRITER") %></td>
+						<td><%=rmap.get("B_hit") %></td>
+					</tr>					
+<%
+	}
+	
+%>
+		    	
+		    	      		
 		    	</tbody>
 			</table> 	
 <hr />  
@@ -94,7 +150,7 @@
 	      <!-- Modal body -->
 	      <div class="modal-body">
 	      	<!-- <form id="f_board" method="get" action="./boardInsert.pj2"> -->
-	      	<form id="f_board" method="post" enctype="multipart/form-data" action="./boardInsert.pj2">
+	      	<form id="f_board" method="post"  action="./boardInsert.gd2">
 	      	  <input type="hidden" name="method" value="boardInsert">
 	          <div class="form-floating mb-3 mt-3">
 	            <input type="text"  class="form-control" id="b_title" name="b_title" placeholder="Enter 제목" />

@@ -3,14 +3,14 @@
  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
 <mapper namespace="com.mybatis.mapper.boardMapper">
-	<resultMap id="ntVO" type="com.vo.BoardVO">
+	<resultMap id="bVO" type="com.vo.BoardVO">
 	</resultMap>
 	<select id="proc_boardList" parameterType="map" statementType="CALLABLE">
 		{ call proc_boardList(#{key, jdbcType=CURSOR, mode=OUT, javaType=java.sql.ResultSet, resultMap=ntVO}) }
 	</select>
 	<insert id="boardInsert" parameterType="java.util.Map">
-		insert into  board(b_no,  b_title, b_content, b_writer, b_hit, b_file)
-		values(seq_board_no.nextval, #{b_title}, #{b_content}, #{b_writer},0,#{b_file})
+		insert into  board(b_no,  b_title, b_content, b_writer, b_hit, b_date, b_file)
+		values(seq_board_no.nextval, #{b_title}, #{b_content}, #{b_writer}, 0,  to_char(sysdate, 'YYYY-MM-DD HH24:MI:SS'),   #{b_file})
 	</insert>
 	<update id="boardUpdate" parameterType="map">
 		update board
@@ -19,11 +19,11 @@
 		          ,  b_writer = #{b_writer}
 		  where b_no = #{b_no}
 	</update>
-	<delete id="boardDelete" parameterType="map">
-		delete from board where b_no = #{b_no}  	
+	<delete id="boardDelete" parameterType="int">
+		delete from board where b_no = #{value}  	
 	</delete>
 	<select id="boardList" parameterType="map"  resultType = "map">
-		select b_no, b_title, b_content, b_writer from board
+		select b_no, b_title, b_content, b_writer, b_hit, NVL(b_file, '없음') b_file from board
 		<where>
 			<if test="b_no!=null">AND b_no=#{b_no}</if>
 			<if test="gubun!=null">

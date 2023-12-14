@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.vo.BoardVO;
 
 import java.io.File;
 import java.util.Enumeration;
@@ -36,7 +37,6 @@ public class HashMapBinder {
 		catch(Exception e) {
 			logger.info(e.toString());
 		}
-		
 		
 		
 		//이미지 처리말고 Post에서 첨부파일에 있는 포스트 방식일 때 사용하는 메소드
@@ -93,11 +93,26 @@ public class HashMapBinder {
 		//<input type="text" name="n_content">
 		//<input type="text" name="n_writer">
 		Enumeration<String> em = req.getParameterNames();
+		
+		
 		while(em.hasMoreElements()) {
 			//키값 꺼내기
 			String key = em.nextElement();//n_title, n_content, n_writer
 			pMap.put(key, req.getParameter(key));
 		}////////////// end of while
+		
+	
+		//insert문 처리 DTO / VO 객체를 만든다음에 넣고 pMap 반환
+//		String b_title = req.getParameter("b_title");
+//		String b_writer = req.getParameter("b_writer");
+//		String b_content = req.getParameter("b_content");
+//		String b_file = req.getParameter("b_file");
+//		pMap.put("b_title", b_title);
+//		pMap.put("b_writer", b_writer);
+//		pMap.put("b_content", b_content);
+//		pMap.put("b_file", b_file);
+		
+		
 		logger.info(pMap.toString());
 	}///////////////// end of bind
 }/////////////////// end of HashMapBinder
