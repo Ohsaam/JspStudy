@@ -75,7 +75,7 @@ public class ActionSupport extends HttpServlet {
 			else if(obj instanceof ModelAndView) {
 				mav = (ModelAndView)obj;
 				pageMove = new String[2];
-				pageMove[0] = "forward";
+				pageMove[0] = "";
 				pageMove[1] = mav.getViewName();
 				logger.info("pageMove ==> "+pageMove[0] +", "+pageMove[1]);
 			}
@@ -96,7 +96,6 @@ public class ActionSupport extends HttpServlet {
 					RequestDispatcher view = req.getRequestDispatcher(path);
 					view.forward(req, res);
 				}else {
-					path = pageMove[0] +"/"+pageMove[1];//board/boardList
 					// /WEB-INF/jsp/board/boardList.jsp -> spring ViewResolver
 					RequestDispatcher view = req.getRequestDispatcher("/WEB-INF/jsp/"+path+".jsp");
 					view.forward(req, res);										

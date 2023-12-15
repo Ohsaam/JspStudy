@@ -66,10 +66,10 @@ public class Board2Controller implements Controller3 {
 		logger.info(bList);
 		ModelAndView mav = new ModelAndView(req);//WEB-INF/jsp/[[[board2/boardDetail]]].jsp
 		mav.addObject("bList", bList);
-		mav.setViewName("boardDetail");
+		mav.setViewName("board2/boardDetail");
 		return mav;
-	} 
-  
+	}
+
 	@Override
 	public Object boardInsert(HttpServletRequest req, HttpServletResponse res) {
 		// TODO Auto-generated method stub
