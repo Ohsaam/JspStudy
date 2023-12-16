@@ -20,14 +20,10 @@ public class ActionSupport extends HttpServlet {
 	throws ServletException, IOException
 	{
 		String  uri = req.getRequestURI(); // =>/board/boardInsert.gd2?n_title=a&n_content=b
-		logger.info(uri);
 		String context = req.getContextPath();// /
-		logger.info(context);
 		String command = uri.substring(context.length()+1);//-> board/boardInsert.gd
-		logger.info(command);
 		//뒤에 의미없는 확장자 gd를 잘라내기
 		int end = command.lastIndexOf(".");//점이 있는 위치정보를 가져온다
-		logger.info(""+end);
 		command =  command.substring(0,end);//-> notice/noticeInsert까지만 가져온다. .gd는 빼고서....
 		logger.info(command);//-> notice/noticeList or notice/noticeInsert or notice/noticeUpdate or notice/noticeDelete
 		String upmu[] = null;
@@ -96,6 +92,7 @@ public class ActionSupport extends HttpServlet {
 					RequestDispatcher view = req.getRequestDispatcher(path);
 					view.forward(req, res);
 				}else {
+					logger.info("여길타야되는거아닌가?");
 					// /WEB-INF/jsp/board/boardList.jsp -> spring ViewResolver
 					RequestDispatcher view = req.getRequestDispatcher("/WEB-INF/jsp/"+path+".jsp");
 					view.forward(req, res);										
@@ -109,6 +106,7 @@ public class ActionSupport extends HttpServlet {
 			}
 			//JSON포맷으로 반환되는 값을 출력하기 - @ResponseBody, @RestController역할 재현
 			else {
+				logger.info("여길타니?");
 				res.setContentType("text/plain;charset=utf-8");
 				PrintWriter out = res.getWriter();
 				out.print(obj);

@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 //if문을  클래스로 설계해 낼 수 있도록 훈련하자 - 자바기초
 //나도 서블릿과 의존관계에 있다
 public class HandlerMapping {
+	static Logger logger = Logger.getLogger(HandlerMapping.class);
 	//사용자 정의 메소드
 	//1-2와 달라진 부분
 	//하나. 직관적이지 않았던 if문을 전담하는 클래스를 따로 구성함 - 이런 클래스를 프레임워크가 지원하는 것이다. - F/W설계하는 사람이 정한 약속 - 컨벤션이다
@@ -34,6 +35,12 @@ public class HandlerMapping {
 		Controller3 controller = null;
 		Object obj = null;
 		ModelAndView mav = null;
+		
+		if("auth/kakao/callback".equals(upmu[0]))
+		{
+			logger.info("kako들어옴");
+			controller = new KaKaoController();
+		}
 		
 		///////////////////// [[ 게시판  시작 ]] ///////////////////
 		if("board2".equals(upmu[0])) {
@@ -52,7 +59,7 @@ public class HandlerMapping {
 				if(obj instanceof ModelAndView) {
 					return (ModelAndView)obj;
 				}
-				else if(obj instanceof String) {
+				else if(obj instanceof String) { // 얘는 실질적으로 필요없지 않음?
 					return (String)obj;
 				}
 			}//////////end of boardDetail메소드 호출

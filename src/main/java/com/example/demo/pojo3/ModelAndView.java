@@ -59,7 +59,11 @@ public class ModelAndView {
 		return viewName;
 	}
 	public void addObject(String name, Object obj) {
-		Map<String, Object> pMap = new HashMap<>();
+//		Map<String, Object> pMap = new HashMap<>();
+//		pMap.put(name, obj);
+//		req.setAttribute(name, obj);
+//		list.add(pMap);
+		Map<String,Object> pMap = new HashMap<>();
 		pMap.put(name, obj);
 		req.setAttribute(name, obj);
 		list.add(pMap);
